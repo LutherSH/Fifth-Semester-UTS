@@ -16,7 +16,7 @@ public class PlayerMovement : MonoBehaviour
     Vector3 velocity;
 
     bool isGrounded;
-    bool isMoving;
+    //bool isMoving;
 
     private Vector3 lastPosition = new Vector3(0f, 0f, 0f);
 
@@ -29,36 +29,36 @@ public class PlayerMovement : MonoBehaviour
     {
         // Ground Check
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
-        // Reset velocity defaultnya
+        // Reset The Default Velocity
         if (isGrounded && velocity.y < 0)
         {
             velocity.y = -2f;
         }
 
-        // Dapetin Inputnya
+        // Getting Input
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
 
         // Moving Vector
         Vector3 move = transform.right * x + transform.forward * z; // right - red axis, forward - blue axis
 
-        // Gerakin Playernya
+        // Move The Player
         controller.Move(move * speed * Time.deltaTime);
 
-        // Check apakah player bisa lompat
+        // Check If Player Can Jump
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
-            // Lompatnya
+            // The Jump
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
 
-        // Jatuhnya
+        // The Fall
         velocity.y += gravity * Time.deltaTime;
 
-        // Eksekusi lompat
+        // Do The Jump
         controller.Move(velocity * Time.deltaTime);
 
-        if (lastPosition != gameObject.transform.position && isGrounded == true)
+        /*if (lastPosition != gameObject.transform.position && isGrounded == true)
         {
             isMoving = true;
         }
@@ -68,5 +68,6 @@ public class PlayerMovement : MonoBehaviour
         }
 
         lastPosition = gameObject.transform.position;
+        */
     }
 }
