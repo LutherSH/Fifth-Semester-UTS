@@ -22,10 +22,10 @@ public class PlayerMove : MonoBehaviour
     float rotationX = 0;
 
     public bool canMove = true;
-    private bool bunnyHop =  false;
-    
+    private bool bunnyHop = false;
 
-    
+
+
     CharacterController characterController;
     void Start()
     {
@@ -83,30 +83,35 @@ public class PlayerMove : MonoBehaviour
         #endregion
 
         #region Bunny Hop easter egg
-            isGrounded = Physics.Raycast(transform.position, Vector3.down, 0.1f);
+        isGrounded = Physics.Raycast(transform.position, Vector3.down, 0.1f);
 
-            if (bunnyHop)
-            {
-                float moveInput = Input.GetAxis("Horizontal");
-                Vector3 moveDirection = new Vector3(moveInput, 0f, 0f);
-            }
+        if (bunnyHop)
+        {
+            float moveInput = Input.GetAxis("Horizontal");
+            Vector3 moveDirection = new Vector3(moveInput, 0f, 0f);
+        }
 
-            if (isGrounded)
-            {
-                rb.AddForce(moveDirection * walkSpeed);
-                
-                if (rb.velocity.magnitude > maxSpeed)
-                {
-                    rb.velocity = rb.velocity.normalized * maxSpeed;
-                }
-            }
-            
-            if (isGrounded && Input.GetButton("Jump"))
-            {
-                rb.AddForce(Vector3.up * jumpPower,ForceMode.Impulse);
-            }
+        if (isGrounded)
+        {
+            rb.AddForce(moveDirection * walkSpeed);
 
-            #endregion
+            if (rb.velocity.magnitude > maxSpeed)
+            {
+                rb.velocity = rb.velocity.normalized * maxSpeed;
+            }
+        }
+
+        if (isGrounded && Input.GetButton("Jump"))
+        {
+            rb.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
+        }
+
+        #endregion
 
     }
+
+
+
 }
+
+
