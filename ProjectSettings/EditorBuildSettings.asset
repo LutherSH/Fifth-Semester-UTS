@@ -8,4 +8,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Daffa/Scenes/Daffa.unity
     guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/_Luthvy/Scene/AI Test 1.unity
+    guid: ffda1b2d033bcfb48bc8cdc5dbb1c576
   m_configObjects: {}
