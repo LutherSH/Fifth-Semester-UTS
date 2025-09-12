@@ -14,23 +14,23 @@ public class MouseMovements : MonoBehaviour
     public float bottomClamp = 90f;
     void Start()
     {
-        // Ngelock cursor di tengah layar sama bikin invisible
+        // Lock Cursor At The Middle Of The Screen And Made It Invisible
         Cursor.lockState = CursorLockMode.Locked;
     }
 
     void Update()
     {
-        // Buat mouse inputs
+        // Mouse Inputs
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
 
-        // Liat Atas & Bawah
+        // Look Up & Down
         xRotation -= mouseY;
 
-        // Dikasi Clamp
+        // Clamp
         xRotation = Mathf.Clamp(xRotation, topClamp, bottomClamp);
 
-        // Liat Kanan & Kiri
+        // Look Right & Left
         yRotation += mouseX;
 
         transform.localRotation = Quaternion.Euler(xRotation, yRotation, 0f);
