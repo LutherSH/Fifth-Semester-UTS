@@ -8,10 +8,10 @@ public class AttackState : TheState
 /// PROPERTIES OF STATE
     private EnemyAnimalAI enemy;
     private Transform player;
-    public AttackState(EnemyAnimalAI enemyAI, Transform playerTrasform) // REGISTER STATE
+    public AttackState(EnemyAnimalAI enemyAI)//, Transform playerTrasform) // REGISTER STATE
     {
         enemy = enemyAI;
-        player = playerTrasform;
+        //player = playerTrasform;
     }
 
 ///////////////////////////////////////////////////////////////////////
@@ -27,7 +27,7 @@ public class AttackState : TheState
     public void Update()
     {
         Debug.LogError("Attacked Launched");
-        enemy.SwitchState(new ChaseState(enemy, player));
+        //enemy.SwitchState(new ChaseState(enemy));
     }
 
 ///////////////////////////////////////////////////////////////////////

@@ -5,47 +5,42 @@ public class ChaseState : TheState
 ///////////////////////////////////////////////////////////////////////
 /// PROPERTIES OF STATE
     private EnemyAnimalAI enemy;
-    private Transform player;
+    //private Transform player;
 
-    public ChaseState(EnemyAnimalAI enemyAI, Transform playerTransform) // REGISTER STATE AND THE PROPERTIES
+    public ChaseState(EnemyAnimalAI enemyAI) //Transform playerTransform) // REGISTER STATE AND THE PROPERTIES
     {
         enemy = enemyAI;
-        player = playerTransform;
+        //player = playerTransform;
     }
-    
-///////////////////////////////////////////////////////////////////////
-/// STATE ENTER
+
+    ///////////////////////////////////////////////////////////////////////
+    /// STATE ENTER
     public void Enter()
     {
         Debug.Log("Entering Chase");
+        if (enemy.nAgent != null)
+        {
+            enemy.nAgent.isStopped = false;
+        }
     }
-    
-///////////////////////////////////////////////////////////////////////
-/// STATE UPDATE
+
+    ///////////////////////////////////////////////////////////////////////
+    /// STATE UPDATE
     public void Update()
     {
-        if (player == null) return;
+        if (enemy.player == null)
+            return;
 
-        // DIRECTION TO PLAYER
-        Vector3 direction = (player.position - enemy.transform.position).normalized;
+        enemy.nAgent.SetDestination(enemy.player.position);
 
-        // FACE TO PLAYER
-        if (direction != Vector3.zero)
+        if (!enemy.playerInSightRange)
         {
-            Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
-            enemy.transform.rotation = Quaternion.Slerp(
-            enemy.transform.rotation,
-            lookRotation,
-            Time.deltaTime * enemy.rotationSpeed);
+            enemy.SwitchState(new IdleState(enemy));
         }
 
-        // MOVING TO PLAYER
-        enemy.transform.position += direction * enemy.chaseSpeed * Time.deltaTime;
-
-        // PLAYER FLEE ? GO BACK TO PATROL
-        if (Vector3.Distance(enemy.transform.position, player.position) > enemy.chaseStopRange)
+        else if (enemy.playerInAttackRange)
         {
-            enemy.SwitchState(new PatrolState(enemy));
+            enemy.SwitchState(new AttackState(enemy));
         }
     }
     

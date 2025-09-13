@@ -1,100 +1,125 @@
+using JetBrains.Annotations;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class EnemyAnimalAI : MonoBehaviour
 {
     private TheState currentState;
+    public NavMeshAgent nAgent;
+    public Transform player;
+    public LayerMask theGround, thePlayer;
 
-///////////////////////////////////////////////////////////////////////
-///// Property For Patrol
+    ///////////////////////////////////////////////////////////////////////
+    ///// Property For Patrol
 
-    [Header("Patrol Settings")] 
-    public Transform[] waypoints;
-    [HideInInspector] public int currentWaypointIndex = 0;
-    public float speed = 2f;
+    [Header("Patrol Settings")]
+    public Vector3 walkPoint;
+    public bool setAWalkPoint;
+    public float rangeOfWalkpoint;
+    public Vector3 distanceToWalkPoint;
 
-///////////////////////////////////////////////////////////////////////
-//// Property For Idle
+    ///////////////////////////////////////////////////////////////////////
+    //// Property For Idle
 
     [Header("Idle Settings")] 
-    public float idleDuration = 2f;
+    public float idleDuration = 5f;
 
-///////////////////////////////////////////////////////////////////////
-///// Property For Chase
+    ///////////////////////////////////////////////////////////////////////
+    ///// Property For Chase
 
-    [Header("Chase Settings")] 
-    public Transform player;
-    public float chaseSpeed = 3.5f;
-    public float chaseRange = 5f;         
-    public float chaseStopRange = 7f;  
-    public float rotationSpeed = 1f;
+    [Header("Chase Settings")]
+    public bool playerInSightRange;
+    public float sightRange;
 
-///////////////////////////////////////////////////////////////////////
-//// Property For Attack
+    ///////////////////////////////////////////////////////////////////////
+    //// Property For Attack
 
     [Header("Attack Settings")]
-    public float launchAttackRange = 3f;
+    public bool playerInAttackRange;
+    public float attackRange;
 
-///////////////////////////////////////////////////////////////////////
-/// START
+    ///////////////////////////////////////////////////////////////////////
+    //// Property For Vision
+
+    [Header("Vision Settings")]
+    private float visionRange = 10f;
+    public float fov = 90f;
+    public LayerMask theWall;
+
+    ///////////////////////////////////////////////////////////////////////
+    /// START
+
+    private void Awake()
+    {
+        player = GameObject.Find("PlayerTrue").transform;
+        nAgent = GetComponent<NavMeshAgent>();
+    }
 
     void Start()
     {
         SwitchState(new IdleState(this)); // IDLE
+        visionRange = sightRange;
     }
-///////////////////////////////////////////////////////////////////////
-/// UPDTAE
+    ///////////////////////////////////////////////////////////////////////
+    /// UPDATE
     void Update()
     {
-        if (player != null) // PLAYER CHECK
+        // Attack check (still sphere-based)
+        playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, thePlayer);
+
+        // Vision check (cone FOV)
+        Vector3 directionToPlayer = (player.position - transform.position).normalized;
+        float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+
+        // Is player within sight radius?
+        if (distanceToPlayer <= sightRange)
         {
-            float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+            // Is player within FOV cone?
+            float angleToPlayer = Vector3.Angle(transform.forward, directionToPlayer);
 
-            // CHECK RANGE
-            if (distanceToPlayer < chaseRange)
+            if (angleToPlayer <= fov / 2f)
             {
-                // MOVE TO PLAYER
-                Vector3 directionToPlayer = (player.position - transform.position).normalized;
-
-                // RAYCAST SHOT
-                RaycastHit hit;
-                if (Physics.Raycast(transform.position + Vector3.up, directionToPlayer, out hit, chaseRange))
+                // Raycast to check for walls
+                if (!Physics.Raycast(transform.position, directionToPlayer, distanceToPlayer, theWall))
                 {
-                    Debug.DrawLine(transform.position + Vector3.up, hit.point, Color.red);
-
-                    // SEE PLAYER ? CHASE PLAYER .
-                    if (hit.collider.CompareTag("Player"))
-                    {
-                        if (!(currentState is ChaseState))
-                        {
-                            SwitchState(new ChaseState(this, player));
-                        }
-                    }
-
-                    // CANT SEE PLAYER ? DONT CHASE PLAYER
-                    else
-                    {
-                        SwitchState(new PatrolState(this));
-                    }
+                    playerInSightRange = true;   // ✅ Player is visible
                 }
-             }
-            // else
-            // { 
-            //     if (currentState is ChaseState)
-            //     {
-            //         SwitchState(new IdleState(this));
-            //     }
-            // }
+                else
+                {
+                    playerInSightRange = false;  // ❌ Blocked by wall
+                }
+            }
+            else
+            {
+                playerInSightRange = false;      // ❌ Outside cone
+            }
+        }
+        else
+        {
+            playerInSightRange = false;          // ❌ Too far away
         }
 
-        // STATE CHECK
+        // STATE UPDATER
         if (currentState != null)
         {
             currentState.Update();
         }
     }
 
-///////////////////////////////////////////////////////////////////////
-/// STATE SWITCHER
+    public void SearchWalkPoint()
+    {
+        float randomizedZ = Random.Range(-rangeOfWalkpoint, rangeOfWalkpoint);
+        float randomizedX = Random.Range(-rangeOfWalkpoint, rangeOfWalkpoint);
+
+        walkPoint = new Vector3(transform.position.x + randomizedX, transform.position.y, transform.position.z + randomizedZ);
+
+        if (Physics.Raycast(walkPoint, -transform.up, 2f, theGround))
+        {
+            setAWalkPoint = true;
+        }
+    }
+    ///////////////////////////////////////////////////////////////////////
+    /// STATE SWITCHER
     public void SwitchState(TheState newState)
     {
         if (currentState != null) currentState.Exit();
@@ -102,19 +127,28 @@ public class EnemyAnimalAI : MonoBehaviour
         currentState.Enter();
     }
 
-///////////////////////////////////////////////////////////////////////
-/// DRAW GIZMIOZ
+    ///////////////////////////////////////////////////////////////////////
+    /// DRAW GIZMIOZ
     void OnDrawGizmosSelected()
     {
-
+        // Draw sight radius
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, chaseRange);
+        Gizmos.DrawWireSphere(transform.position, sightRange);
 
+        // Draw patrol range
         Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position, chaseStopRange);
+        Gizmos.DrawWireSphere(transform.position, rangeOfWalkpoint);
 
+        // Draw attack range
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, launchAttackRange);
-        
+        Gizmos.DrawWireSphere(transform.position, attackRange);
+
+        // Draw FOV lines
+        Vector3 fovLine1 = Quaternion.Euler(0, fov / 2, 0) * transform.forward * sightRange;
+        Vector3 fovLine2 = Quaternion.Euler(0, -fov / 2, 0) * transform.forward * sightRange;
+
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawLine(transform.position, transform.position + fovLine1);
+        Gizmos.DrawLine(transform.position, transform.position + fovLine2);
     }
 }
