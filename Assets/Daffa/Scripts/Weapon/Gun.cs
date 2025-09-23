@@ -27,12 +27,12 @@ public abstract class Gun : MonoBehaviour
 
     public virtual void Update()
     {
-        playerController.ResetRecoil(gunData);
     }
 
+    private void OnDisable() => isReloading = false;
     public void TryReload()
     {
-        if (!isReloading && currentAmmo < gunData.magazineSize)
+        if (!isReloading && currentAmmo < gunData.magazineSize && this.gameObject.activeSelf)
         {
             StartCoroutine(Reload());
         }
@@ -82,8 +82,6 @@ public abstract class Gun : MonoBehaviour
 
         Debug.Log(gunData.gunName + " Shot!, Bullet left: " + currentAmmo);
         Shoot();
-
-        playerController.ApplyRecoil(gunData);
     }
 
     public abstract void Shoot();
