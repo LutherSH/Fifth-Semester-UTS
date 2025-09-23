@@ -24,7 +24,7 @@ public class Pistol : Gun
         RaycastHit hit;
         Vector3 target = Vector3.zero;
 
-        if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out hit, gunData.shootingRange, gunData.targetLayerMask))
+        if (Physics.Raycast(cameraTransform.position, gunMuzzle.forward, out hit, gunData.shootingRange, gunData.targetLayerMask))
         {
             //Debug.Log(gunData.gunName + " hit " + hit.collider.name);
 

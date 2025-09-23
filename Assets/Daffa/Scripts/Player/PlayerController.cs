@@ -108,7 +108,9 @@ public class PlayerController : MonoBehaviour
     private void GroundMovement()
     {
         Vector3 move = new Vector3(turnInput, 0, moveInput);
-        move = virtualCamera.transform.TransformDirection(move);                    // Move forward follow the cinemachine camera direction
+        
+        // Move forward follow the cinemachine camera direction
+        move = virtualCamera.transform.TransformDirection(move);                    
 
         float targetMultiplier = 1f;
 
