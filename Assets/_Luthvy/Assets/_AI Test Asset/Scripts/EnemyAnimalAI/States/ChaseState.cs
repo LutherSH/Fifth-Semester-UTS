@@ -21,33 +21,53 @@ public class ChaseState : TheState
         if (enemy.nAgent != null)
         {
             enemy.nAgent.isStopped = false;
+            enemy.nAgent.updateRotation = false;
+            enemy.fov = 300f;
         }
     }
 
     ///////////////////////////////////////////////////////////////////////
     /// STATE UPDATE
-    public void Update()
-    {
-        if (enemy.player == null)
+public void Update()
+{
+    
+    if (enemy.player == null)
             return;
 
-        enemy.nAgent.SetDestination(enemy.player.position);
+    // Keep chasing
+    enemy.nAgent.SetDestination(enemy.player.position);
 
-        if (!enemy.playerInSightRange)
-        {
-            enemy.SwitchState(new IdleState(enemy));
-        }
+    // Face the player
+    Vector3 direction = (enemy.player.position - enemy.transform.position).normalized;
+    direction.y = 0; // keep upright, no tilting
 
-        else if (enemy.playerInAttackRange)
-        {
-            enemy.SwitchState(new AttackState(enemy));
-        }
+    if (direction.magnitude > 0.01f)
+    {
+        Quaternion lookRotation = Quaternion.LookRotation(direction);
+        enemy.transform.rotation = Quaternion.Slerp(
+            enemy.transform.rotation,
+            lookRotation,
+            Time.deltaTime * 5f // turn speed
+        );
     }
-    
-///////////////////////////////////////////////////////////////////////
-/// STATE EXIT
+
+    // State switches
+    if (!enemy.playerInSightRange)
+    {
+        enemy.SwitchState(new IdleState(enemy));
+    }
+    else if (enemy.playerInAttackRange)
+    {
+        enemy.SwitchState(new AttackState(enemy));
+    }
+}
+
+    ///////////////////////////////////////////////////////////////////////
+    /// STATE EXIT
     public void Exit()
     {
         Debug.Log("Exiting Chase");
+        enemy.nAgent.updateRotation = true;
+        enemy.fov = enemy.defaultFov;
     }
 }

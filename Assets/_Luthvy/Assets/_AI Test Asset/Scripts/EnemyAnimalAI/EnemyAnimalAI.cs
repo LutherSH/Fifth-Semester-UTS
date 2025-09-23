@@ -1,6 +1,7 @@
 using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Rendering;
 
 public class EnemyAnimalAI : MonoBehaviour
 {
@@ -44,6 +45,7 @@ public class EnemyAnimalAI : MonoBehaviour
     [Header("Vision Settings")]
     private float visionRange = 10f;
     public float fov = 90f;
+    public float defaultFov;
     public LayerMask theWall;
 
     ///////////////////////////////////////////////////////////////////////
@@ -59,6 +61,7 @@ public class EnemyAnimalAI : MonoBehaviour
     {
         SwitchState(new IdleState(this)); // IDLE
         visionRange = sightRange;
+        defaultFov = fov;
     }
     ///////////////////////////////////////////////////////////////////////
     /// UPDATE
