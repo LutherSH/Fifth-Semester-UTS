@@ -23,6 +23,7 @@ public class PatrolState : TheState
         if (enemy.nAgent == null) enemy.nAgent = enemy.GetComponent<NavMeshAgent>();
 
         enemy.nAgent.isStopped = false;
+        enemy.nAgent.updateRotation = false;
 
         if (!enemy.setAWalkPoint)
         {
@@ -34,8 +35,8 @@ public class PatrolState : TheState
         }
     }
 
-///////////////////////////////////////////////////////////////////////
-/// STATE UPDATE
+    ///////////////////////////////////////////////////////////////////////
+    /// STATE UPDATE
     public void Update()
     {
         if (enemy.nAgent == null) return;
@@ -58,6 +59,19 @@ public class PatrolState : TheState
             enemy.setAWalkPoint = false;
             enemy.SwitchState(new IdleState(enemy));
         }
+        
+        // Face Direction
+        Vector3 velocity = enemy.nAgent.desiredVelocity;
+        if (velocity.sqrMagnitude > 0.01f)
+        {
+            Quaternion lookRotation = Quaternion.LookRotation(velocity.normalized);
+            enemy.transform.rotation = Quaternion.Slerp(
+            enemy.transform.rotation,
+            lookRotation,
+            Time.deltaTime * 5f
+            );
+        }
+
     }
     
 ///////////////////////////////////////////////////////////////////////

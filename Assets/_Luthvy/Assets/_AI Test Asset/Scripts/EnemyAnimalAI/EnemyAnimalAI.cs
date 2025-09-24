@@ -39,6 +39,12 @@ public class EnemyAnimalAI : MonoBehaviour
     public bool playerInAttackRange;
     public float attackRange;
 
+    public Transform firePoint;
+    public GameObject arrowPrevab;
+    public float arrowSpeed = 20f;
+    public float fireCooldown = 2f;
+    public float nextFireTime = 0f;
+
     ///////////////////////////////////////////////////////////////////////
     //// Property For Vision
 
@@ -97,9 +103,12 @@ public class EnemyAnimalAI : MonoBehaviour
                 playerInSightRange = false;      // ❌ Outside cone
             }
         }
+
         else
         {
             playerInSightRange = false;          // ❌ Too far away
+            playerInAttackRange = false;
+
         }
 
         // STATE UPDATER

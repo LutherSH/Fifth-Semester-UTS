@@ -21,7 +21,7 @@ public class ChaseState : TheState
         if (enemy.nAgent != null)
         {
             enemy.nAgent.isStopped = false;
-            enemy.nAgent.updateRotation = false;
+            //enemy.nAgent.updateRotation = false;
             enemy.fov = 300f;
         }
     }
@@ -51,15 +51,18 @@ public void Update()
         );
     }
 
-    // State switches
-    if (!enemy.playerInSightRange)
+        // State switches
+    
+    if (enemy.playerInAttackRange == true)
     {
-        enemy.SwitchState(new IdleState(enemy));
-    }
-    else if (enemy.playerInAttackRange)
-    {
+        //Debug.LogWarning("ATTACk");
         enemy.SwitchState(new AttackState(enemy));
     }
+
+    else if (!enemy.playerInSightRange)
+        {
+            enemy.SwitchState(new IdleState(enemy));
+        }
 }
 
     ///////////////////////////////////////////////////////////////////////
@@ -67,7 +70,7 @@ public void Update()
     public void Exit()
     {
         Debug.Log("Exiting Chase");
-        enemy.nAgent.updateRotation = true;
+        //enemy.nAgent.updateRotation = true;
         enemy.fov = enemy.defaultFov;
     }
 }
