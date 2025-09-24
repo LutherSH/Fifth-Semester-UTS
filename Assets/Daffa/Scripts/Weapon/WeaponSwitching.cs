@@ -19,10 +19,14 @@ public class WeaponSwitching : MonoBehaviour
     private int selectedWeapon;
     private float timeSinceLastSwitch;
 
+    private AmmoUI ammoUI;
+
     private void Start()
     {
         SetWeapons();
         Select(selectedWeapon);
+
+        ammoUI = FindObjectOfType<AmmoUI>();
 
         timeSinceLastSwitch = 0f;
     }
@@ -31,6 +35,7 @@ public class WeaponSwitching : MonoBehaviour
     {
         int previousSelectedWeapon = selectedWeapon;
 
+        // Keyboard Input
         for (int i = 0; i < keys.Length; i++)
         {
             if (Input.GetKeyDown(keys[i]) && timeSinceLastSwitch >= switchTime)
@@ -39,7 +44,24 @@ public class WeaponSwitching : MonoBehaviour
             }
         }
 
-        if (previousSelectedWeapon != selectedWeapon) Select(selectedWeapon);
+        // Scroll Wheel
+        float scroll = Input.GetAxis("Mouse ScrollWheel");
+        if (scroll != 0 && timeSinceLastSwitch >= switchTime)
+        {
+            if (scroll > 0)
+            {
+                selectedWeapon = (selectedWeapon + 1) % weapons.Length;
+            }
+            else
+            {
+                selectedWeapon = (selectedWeapon - 1 + weapons.Length) % weapons.Length;
+            }
+        }
+
+        if (previousSelectedWeapon != selectedWeapon)
+        {
+            Select(selectedWeapon);
+        }
 
         timeSinceLastSwitch += Time.deltaTime;
     }
@@ -65,11 +87,21 @@ public class WeaponSwitching : MonoBehaviour
 
         timeSinceLastSwitch = 0f;
 
-        OnWeaponSelected();
-    }
+        // Update UI when weapon switched
+        UpdateAmmoUIForWeapon(weaponIndex);
 
-    private void OnWeaponSelected()
+        Debug.Log("Selected weapon: " + weapons[weaponIndex].name);
+    }
+    
+    private void UpdateAmmoUIForWeapon(int weaponIndex)
     {
-        print("Selected New Weapon..");
+        if (ammoUI == null) return;
+
+        // Get gun component from selected weapon
+        Gun selectedGun = weapons[weaponIndex].GetComponent<Gun>();
+        if (selectedGun != null)
+        {
+            ammoUI.SubscribeToGun(selectedGun);
+        }
     }
 }

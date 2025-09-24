@@ -13,46 +13,73 @@ public abstract class Gun : MonoBehaviour
     [HideInInspector] public Transform cameraTransform;
 
     private float currentAmmo = 0f;
+    private float currentReserveAmmo = 0f;
     private float nextTimeToFire = 0f;
-
     private bool isReloading = false;
 
     public Recoil Recoil_Script;
 
+    // New event for UI update
+    public System.Action<float, float> OnAmmoChanged;
+
     void Start()
     {
         currentAmmo = gunData.magazineSize;
+        currentReserveAmmo = gunData.maxReserveAmmo;
 
         playerController = transform.root.GetComponent<PlayerController>();
         cameraTransform = playerController.virtualCamera.transform;
+
+        OnAmmoChanged?.Invoke(currentAmmo, currentReserveAmmo);
+
+        Debug.Log(gunData.gunName + " initialized. Ammo: " + currentAmmo + "/" + currentReserveAmmo);
 
     }
 
     public virtual void Update()
     {
+        // Debug Input for testing
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            Debug.Log(gunData.gunName + " Ammo: " + currentAmmo + "/" + currentReserveAmmo);
+        }
     }
 
     private void OnDisable() => isReloading = false;
     public void TryReload()
     {
-        if (!isReloading && currentAmmo < gunData.magazineSize && this.gameObject.activeSelf)
+        if (!isReloading && currentAmmo < gunData.magazineSize && currentReserveAmmo > 0 && this.gameObject.activeSelf)
         {
             StartCoroutine(Reload());
+        }
+        else if (currentReserveAmmo <= 0)
+        {
+            Debug.Log("No ammo left");
         }
     }
 
     private IEnumerator Reload()
     {
         isReloading = true;
-
         Debug.Log(gunData.gunName + " Is reloading...");
+
+        // Calculate ammo needed
+        float ammoNeeded = gunData.magazineSize - currentAmmo;
+        float ammoToReload = Mathf.Min(ammoNeeded, currentReserveAmmo);
+
+        // Take reserve, add magazine
+        currentReserveAmmo -= ammoToReload;
+        currentAmmo += ammoToReload;
 
         yield return new WaitForSeconds(gunData.reloadTime);
 
-        currentAmmo = gunData.magazineSize;
+        //currentAmmo = gunData.magazineSize;
         isReloading = false;
 
-        Debug.Log(gunData.gunName + " Is reloaded");
+        Debug.Log(gunData.gunName + " Reloaded. Ammo: " + currentAmmo + "/" + currentReserveAmmo);
+
+        // Call event after reload
+        OnAmmoChanged?.Invoke(currentAmmo, currentReserveAmmo);
     }
 
     public void TryShoot()
@@ -66,6 +93,7 @@ public abstract class Gun : MonoBehaviour
         if (currentAmmo <= 0f)
         {
             Debug.Log(gunData.gunName + " Has no bullet left, Please reload");
+            TryReload();
             return;
         }
 
@@ -84,9 +112,31 @@ public abstract class Gun : MonoBehaviour
         Recoil_Script.RecoilFire();
         // Muzzleflash();
 
-        Debug.Log(gunData.gunName + " Shot!, Bullet left: " + currentAmmo);
+        Debug.Log(gunData.gunName + " Shot! Ammo: " + currentAmmo + "/" + currentReserveAmmo);
+
+        // Call event after shoot
+        OnAmmoChanged?.Invoke(currentAmmo, currentReserveAmmo);
+
         Shoot();
     }
 
+    // Method for ammo UI
+    public float GetCurrentAmmo()
+    {
+        return currentAmmo;
+    }
+
+    public float GetReserveAmmo()
+    {
+        return currentReserveAmmo;
+    }
+
+    // Pick up ammo
+    /*public void AddAmmo(int amount)
+    {
+        currentReserveAmmo = Mathf.Min(currentReserveAmmo + amount, gunData.maxReserveAmmo);
+        Debug.Log("Picked up " + amount + " ammo for " + gunData.gunName + ". Reserve: " + currentReserveAmmo);
+    }
+    */
     public abstract void Shoot();
 }

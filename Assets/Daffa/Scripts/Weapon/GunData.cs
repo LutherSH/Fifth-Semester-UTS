@@ -17,6 +17,7 @@ public class GunData : ScriptableObject
 
     [Header("Reload Config")]
     public float magazineSize;
+    public float maxReserveAmmo;
     public float reloadTime;
 
     [Header("VFX")]
