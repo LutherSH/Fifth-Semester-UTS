@@ -59,7 +59,8 @@ public class PauseMenuTG : MonoBehaviour
 
     public void Resume()
     {
-        Cursor.lockState = CursorLockMode.None;
+        //Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = false;
         player.SetActive(true);
         playerController.enabled = true;
 

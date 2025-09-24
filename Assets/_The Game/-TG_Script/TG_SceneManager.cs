@@ -41,11 +41,13 @@ public class SceneManagerTG : MonoBehaviour
 
     public void Gameplay()
     {
-        SceneManager.LoadScene("G_Gameplay");
+        SceneManager.LoadScene("AI Test 1");
     }
     public void MainMenu()
     {
         SceneManager.LoadScene("G_MainMenu");
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;   
     }
     public void ShowGameOver()
     {

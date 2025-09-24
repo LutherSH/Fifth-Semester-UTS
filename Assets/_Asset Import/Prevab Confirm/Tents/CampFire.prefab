@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 3520330995074516277}
   - component: {fileID: 7959349309875670215}
   - component: {fileID: 508760841828637171}
-  - component: {fileID: 4016585763477290320}
-  m_Layer: 0
+  - component: {fileID: 7426504454008898853}
+  m_Layer: 8
   m_Name: CampFire
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -84,8 +84,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &4016585763477290320
-MeshCollider:
+--- !u!135 &7426504454008898853
+SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -102,7 +102,6 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -2432090755550338912, guid: 5a4173da58a5c114bb72b6c2d503a3c8, type: 3}
+  serializedVersion: 3
+  m_Radius: 7.0457163
+  m_Center: {x: 0.3639199, y: 3.591193, z: 0.6022551}
