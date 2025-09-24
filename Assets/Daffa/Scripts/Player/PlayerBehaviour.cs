@@ -35,4 +35,12 @@ public class PlayerBehaviour : MonoBehaviour
         GameManager.gameManager._playerHealth.HealUnit(healing);
         _healthBar.SetHealth(GameManager.gameManager._playerHealth.Health);
     }
+
+    private void Die()
+    {
+        // Game over panel
+        // Time.timeScale = 0f;
+        Debug.Log("Player Died");
+        Destroy(gameObject);
+    }
 }
