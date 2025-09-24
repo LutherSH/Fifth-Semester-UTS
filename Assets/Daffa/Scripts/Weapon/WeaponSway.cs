@@ -9,6 +9,14 @@ public class WeaponSway : MonoBehaviour
     [SerializeField] private float smooth;
     [SerializeField] private float swayMultiplier;
 
+    // Public property untuk mengakses rotasi sway
+    public Quaternion SwayRotation { get; private set; }
+
+    private void Start()
+    {
+        SwayRotation = Quaternion.identity;
+    }
+
     private void Update()
     {
         // Get mouse input
@@ -21,7 +29,7 @@ public class WeaponSway : MonoBehaviour
 
         Quaternion targetRotation = rotationX * rotationY;
 
-        // Rotate
-        transform.localRotation = Quaternion.Slerp(transform.localRotation, targetRotation, smooth * Time.deltaTime);
+        // Calculate sway rotation
+        SwayRotation = Quaternion.Slerp(SwayRotation, targetRotation, smooth * Time.deltaTime);
     }
 }

@@ -17,12 +17,15 @@ public abstract class Gun : MonoBehaviour
 
     private bool isReloading = false;
 
+    public Recoil Recoil_Script;
+
     void Start()
     {
         currentAmmo = gunData.magazineSize;
 
         playerController = transform.root.GetComponent<PlayerController>();
         cameraTransform = playerController.virtualCamera.transform;
+
     }
 
     public virtual void Update()
@@ -78,6 +81,7 @@ public abstract class Gun : MonoBehaviour
         currentAmmo--;
 
         // Recoil();
+        Recoil_Script.RecoilFire();
         // Muzzleflash();
 
         Debug.Log(gunData.gunName + " Shot!, Bullet left: " + currentAmmo);
