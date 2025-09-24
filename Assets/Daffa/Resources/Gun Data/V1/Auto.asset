@@ -16,15 +16,11 @@ MonoBehaviour:
   targetLayerMask:
     serializedVersion: 2
     m_Bits: 64
-  damage: 5
+  damage: 15
   shootingRange: 150
   fireRate: 10
   magazineSize: 30
   reloadTime: 2
-  recoilAmount: 2
-  maxRecoil: {x: 5, y: 5}
-  recoilSpeed: 2
-  resetRecoilSpeed: 1
   bulletTrailPrefab: {fileID: 7062137272843539580, guid: 91c533d0d82ac6b4985b851747eeb17b,
     type: 3}
   bulletSpeed: 100
