@@ -46,22 +46,23 @@ public class SMG : Gun
         if (targetCollider.CompareTag("Player"))
         {
             // Damage to Player
-            GameManager.gameManager._playerHealth.DmgUnit(damageAmount);
-            Debug.Log("Player took " + damageAmount + " damage. Current health: " + 
-                     GameManager.gameManager._playerHealth.Health + "/" + 
-                     GameManager.gameManager._playerHealth.MaxHealth);
+            PlayerBehaviour player = targetCollider.GetComponent<PlayerBehaviour>();
+            if (player != null)
+            {
+                player.PlayerTakeDmg(damageAmount);
+            }
         }
         else if (targetCollider.CompareTag("Enemy"))
         {
-            // Damage to Enemy
-            GameManager.gameManager._enemyHealth.DmgUnit(damageAmount);
-            Debug.Log("Enemy took " + damageAmount + " damage. Current health: " + 
-                     GameManager.gameManager._enemyHealth.Health + "/" + 
-                     GameManager.gameManager._enemyHealth.MaxHealth);
+            // Damage to Enemy yang spesifik
+            EnemyBehaviour enemy = targetCollider.GetComponent<EnemyBehaviour>();
+            if (enemy != null)
+            {
+                enemy.EnemyTakeDamage(damageAmount);
+            }
         }
         else
         {
-            // For other object that might have Health System
             Debug.Log("Hit " + targetCollider.name + " but no specific health system applied");
         }
     }
