@@ -7,18 +7,36 @@ public class SceneManagerTG : MonoBehaviour
 {
     public string sceneName;
     public GameObject gameOverScreen;
+    public GameObject winScreen;
 
     //////////////////////////////////////////////////////////
 
     private void Start()
     {
         gameOverScreen.SetActive(false);
+        Time.timeScale = 1f;
     }
 
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+    }
     //////////////////////////////////////////////////////////
     public void LoadScene()
     {
         SceneManager.LoadScene(sceneName);
+    }
+
+    public void TemporaryGameWin()
+    {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+        winScreen.SetActive(true);
+        Time.timeScale = 0f;
     }
 
     public void Gameplay()
@@ -31,6 +49,8 @@ public class SceneManagerTG : MonoBehaviour
     }
     public void ShowGameOver()
     {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
         gameOverScreen.SetActive(true);
         Time.timeScale = 0f;
     }
@@ -45,4 +65,6 @@ public class SceneManagerTG : MonoBehaviour
         //Application.Quit();
         Debug.LogWarning("QUIT GAME");
     }
+
+
 }

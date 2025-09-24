@@ -7,9 +7,13 @@ public class PauseMenuTG : MonoBehaviour
 {
     public static bool GameIsPaused = false;
     public string sceneName;
+    public bool isGamePaused;
+    //public GameObject thePlayer;
+    public PlayerController playerController;
 
     public GameObject pauseMenuUI;
     public Button pauseButton;
+    public GameObject player;
 
     void Start()
     {
@@ -17,6 +21,8 @@ public class PauseMenuTG : MonoBehaviour
         {
             pauseButton.onClick.AddListener(TogglePause);
         }
+        
+        isGamePaused = GameIsPaused;
     }
 
     private void start()
@@ -36,15 +42,27 @@ public class PauseMenuTG : MonoBehaviour
         if (GameIsPaused)
         {
             Resume();
+            Cursor.visible = true;
+            //thePlayer.SetActive(true);
+            
+
         }
         else
         {
             Pause();
+            Cursor.visible = false;
+            //thePlayer.SetActive(false);
+            
+
         }
     }
 
     public void Resume()
     {
+        Cursor.lockState = CursorLockMode.None;
+        player.SetActive(true);
+        playerController.enabled = true;
+
         if (pauseMenuUI != null)
         {
             pauseMenuUI.SetActive(false);
@@ -55,6 +73,10 @@ public class PauseMenuTG : MonoBehaviour
 
     public void Pause()
     {
+        Cursor.lockState = CursorLockMode.None;
+        player.SetActive(false);
+        playerController.enabled = false;
+
         if (pauseMenuUI != null)
         {
             pauseMenuUI.SetActive(true);
@@ -81,4 +103,5 @@ public class PauseMenuTG : MonoBehaviour
         Debug.Log("Quitting game...");
         Application.Quit();
     }
-}
+}   
+

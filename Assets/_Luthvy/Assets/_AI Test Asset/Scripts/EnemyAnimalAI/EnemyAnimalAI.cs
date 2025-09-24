@@ -9,6 +9,7 @@ public class EnemyAnimalAI : MonoBehaviour
     public NavMeshAgent nAgent;
     public Transform player;
     public LayerMask theGround, thePlayer;
+    public PlayerBehaviour playerBehaviour;
 
     ///////////////////////////////////////////////////////////////////////
     ///// Property For Patrol
@@ -43,7 +44,7 @@ public class EnemyAnimalAI : MonoBehaviour
     public GameObject arrowPrevab;
     public float arrowSpeed = 20f;
     public float fireCooldown = 2f;
-    public float nextFireTime = 0f;
+    [HideInInspector]public float nextFireTime = 0f;
 
     ///////////////////////////////////////////////////////////////////////
     //// Property For Vision
@@ -73,6 +74,8 @@ public class EnemyAnimalAI : MonoBehaviour
     /// UPDATE
     void Update()
     {
+        if (playerBehaviour.isDead) return;
+
         // Attack check (still sphere-based)
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, thePlayer);
 

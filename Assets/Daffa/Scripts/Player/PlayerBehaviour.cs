@@ -5,9 +5,12 @@ using UnityEngine;
 public class PlayerBehaviour : MonoBehaviour
 {
     [SerializeField] HealthBar _healthBar;
+    public SceneManagerTG sceneManager;
+    public bool isDead;
 
     void Start()
     {
+        isDead = false;
     }
 
     void Update()
@@ -44,6 +47,8 @@ public class PlayerBehaviour : MonoBehaviour
     
     private void Die()
     {
+        isDead = true;
+        sceneManager.ShowGameOver();
         Debug.Log("Player Died");
         // Game over logic here
         Destroy(gameObject);

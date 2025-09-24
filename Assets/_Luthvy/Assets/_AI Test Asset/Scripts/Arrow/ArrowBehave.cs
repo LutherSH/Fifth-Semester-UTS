@@ -22,11 +22,15 @@ public class ArrowBehave : MonoBehaviour
         {
             if (other.CompareTag("Player"))
             {
+                PlayerBehaviour player = other.GetComponent<PlayerBehaviour>();
+                if (player != null)
+                {
+                    player.PlayerTakeDmg(damageAmount);
+                    Debug.Log("Player took " + damageAmount + " damage. Current health: " +
+                    GameManager.gameManager._playerHealth.Health + "/" +
+                    GameManager.gameManager._playerHealth.MaxHealth);
+                }   
                 // Damage to Player
-                GameManager.gameManager._playerHealth.DmgUnit(damageAmount);
-                Debug.Log("Player took " + damageAmount + " damage. Current health: " +
-                GameManager.gameManager._playerHealth.Health + "/" +
-                GameManager.gameManager._playerHealth.MaxHealth);
             }
         }
     }
