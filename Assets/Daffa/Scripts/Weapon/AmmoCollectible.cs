@@ -11,7 +11,7 @@ public class AmmoCollectible : MonoBehaviour
     public float floatAmplitude = 0.3f;
     public float floatFrequency = 1.5f;
 
-    [Header("Visual Effects")]
+    [Header("VFX & Sound")]
     public GameObject collectEffect;
     public AudioClip collectSound;
 

@@ -74,19 +74,22 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         InputManagement();
-        HandleCrouch();
+        Turn();
         Movement();
         PlayFootstepSound();
     }
 
     private void Movement()
     {
-        Turn();
         GroundMovement();
+        HandleCrouch();
     }
 
     private void Turn()
     {
+        if (float.IsNaN(mouseX) || float.IsInfinity(mouseX)) mouseX = 0;
+        if (float.IsNaN(mouseY) || float.IsInfinity(mouseY)) mouseY = 0;
+
         mouseX *= mouseSensitivity * Time.deltaTime;
         mouseY *= mouseSensitivity * Time.deltaTime;
 

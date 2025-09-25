@@ -150,7 +150,7 @@ Transform:
   m_GameObject: {fileID: 91756759}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -185,8 +185,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 859764c103c0dc94ba4a1dbcb504d2be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  smooth: 7
-  swayMultiplier: 4
+  smooth: 8
+  swayMultiplier: 2
+  maxSwayAngle: 10
 --- !u!114 &91756763
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -200,10 +201,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   recoilX: -1
-  recoilY: 0.7
+  recoilY: 1
   recoilZ: 0.35
-  snappiness: 3
-  returnSpeed: 2
+  snappiness: 8
+  returnSpeed: 4
+  maxRecoilRotation: 20
 --- !u!1 &272670243
 GameObject:
   m_ObjectHideFlags: 0
@@ -631,7 +633,7 @@ Transform:
   m_GameObject: {fileID: 516089578}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.391, y: -0.386, z: 0.768}
+  m_LocalPosition: {x: 0.4, y: -0.4, z: 1}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2856,7 +2858,7 @@ Transform:
   m_GameObject: {fileID: 2037497543}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.391, y: -0.386, z: 0.768}
+  m_LocalPosition: {x: 0.4, y: -0.4, z: 1}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3042,9 +3044,9 @@ SceneRoots:
   - {fileID: 932516506}
   - {fileID: 272670244}
   - {fileID: 1794987985}
-  - {fileID: 1237732102}
   - {fileID: 627682271}
   - {fileID: 419019989}
   - {fileID: 1321468138}
   - {fileID: 1092486245}
   - {fileID: 975778227}
+  - {fileID: 1237732102}

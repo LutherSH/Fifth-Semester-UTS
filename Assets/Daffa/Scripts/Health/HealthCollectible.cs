@@ -10,7 +10,7 @@ public class HealthCollectible : MonoBehaviour
     public float floatAmplitude = 0.5f;
     public float floatFrequency = 1f;
 
-    [Header("Visual Effects")]
+    [Header("VFX & Sound")]
     public GameObject collectEffect;
     public AudioClip collectSound;
 
