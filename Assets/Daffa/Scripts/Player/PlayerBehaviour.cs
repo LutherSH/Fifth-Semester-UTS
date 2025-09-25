@@ -5,9 +5,16 @@ using UnityEngine;
 public class PlayerBehaviour : MonoBehaviour
 {
     [SerializeField] HealthBar _healthBar;
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip healSound;
 
     void Start()
     {
+        // Get audio source if not assigned
+        if (audioSource == null)
+        {
+            audioSource = GetComponent<AudioSource>();
+        }
     }
 
     void Update()
@@ -40,12 +47,17 @@ public class PlayerBehaviour : MonoBehaviour
     {
         GameManager.gameManager._playerHealth.HealUnit(healing);
         _healthBar.SetHealth(GameManager.gameManager._playerHealth.Health);
+        
+        // Play heal sound
+        if (healSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(healSound);
+        }
     }
     
     private void Die()
     {
         Debug.Log("Player Died");
-        // Game over logic here
         Destroy(gameObject);
     }
 }
