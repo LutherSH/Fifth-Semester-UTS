@@ -17,7 +17,7 @@ public class WeaponSystem : MonoBehaviour
             playerController = transform.root.GetComponent<PlayerController>();
         
         if (cameraTransform == null)
-            cameraTransform = playerController.virtualCamera.transform;
+            cameraTransform = playerController.playerCamera.transform;
 
         state = new WeaponState();
         context = new WeaponContext

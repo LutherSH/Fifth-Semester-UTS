@@ -6,10 +6,9 @@ public class PlayerController : MonoBehaviour
 {
     [Header("References")]
     private CharacterController controller;
-    public CinemachineVirtualCamera virtualCamera;
+    public Camera playerCamera;
     [SerializeField] private AudioSource footstepSound;
-    [SerializeField] private Transform cameraFollowTarget;
-
+    
     [Header("Movements Settings")]
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float sprintSpeedMultiplier = 2f;
@@ -67,11 +66,6 @@ public class PlayerController : MonoBehaviour
         targetHeight = originalHeight;
         targetCameraY = standingCameraY;
 
-        if (cameraFollowTarget == null && virtualCamera != null)
-        {
-            cameraFollowTarget = virtualCamera.Follow;
-        }
-
         // Locked cursor and making it invisible
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -100,7 +94,7 @@ public class PlayerController : MonoBehaviour
 
         xRotation = Mathf.Clamp(xRotation, -90, 90);
 
-        virtualCamera.transform.localRotation = Quaternion.Euler(xRotation, 0, 0);
+        playerCamera.transform.localRotation = Quaternion.Euler(xRotation, 0, 0);
         
         transform.Rotate(Vector3.up * mouseX);
     }
@@ -110,7 +104,7 @@ public class PlayerController : MonoBehaviour
         Vector3 move = new Vector3(turnInput, 0, moveInput);
         
         // Move forward follow the cinemachine camera direction
-        move = virtualCamera.transform.TransformDirection(move);                    
+        move = playerCamera.transform.TransformDirection(move);                    
 
         float targetMultiplier = 1f;
 
@@ -154,13 +148,6 @@ public class PlayerController : MonoBehaviour
 
         controller.height = Mathf.Lerp(controller.height, targetHeight, crouchTransitionSpeed * Time.deltaTime);
         controller.center = Vector3.Lerp(controller.center, targetCenter, crouchTransitionSpeed * Time.deltaTime);
-
-        if (cameraFollowTarget != null)
-        {
-            Vector3 cameraPos = cameraFollowTarget.localPosition;
-            cameraPos.y = Mathf.Lerp(cameraPos.y, targetCameraY, crouchTransitionSpeed * Time.deltaTime);
-            cameraFollowTarget.localPosition = cameraPos;
-        }
     }
 
     private void Crouch()

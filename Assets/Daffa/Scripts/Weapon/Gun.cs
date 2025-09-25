@@ -28,7 +28,7 @@ public abstract class Gun : MonoBehaviour
         currentReserveAmmo = gunData.maxReserveAmmo;
 
         playerController = transform.root.GetComponent<PlayerController>();
-        cameraTransform = playerController.virtualCamera.transform;
+        cameraTransform = playerController.playerCamera.transform;
 
         OnAmmoChanged?.Invoke(currentAmmo, currentReserveAmmo);
 
