@@ -1,15 +1,13 @@
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class Pistol : Gun
+public class SMG : Gun
 {
     public override void Update()
     {
         base.Update();
 
-        if (Input.GetButtonDown("Fire1"))
+        if (Input.GetButton("Fire1"))
         {
             TryShoot();
         }
@@ -24,7 +22,7 @@ public class Pistol : Gun
         RaycastHit hit;
         Vector3 target = Vector3.zero;
 
-        if (Physics.Raycast(cameraTransform.position, gunMuzzle.forward, out hit, gunData.shootingRange, gunData.targetLayerMask))
+        if (Physics.Raycast(cameraTransform.position, gunMuzzle.forward, out hit, gunData.shootingRange/*, gunData.targetLayerMask*/))
         {
             //Debug.Log(gunData.gunName + " hit " + hit.collider.name);
 

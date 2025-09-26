@@ -1,6 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel.Design.Serialization;
 using UnityEngine;
 
 public abstract class Gun : MonoBehaviour
@@ -9,7 +7,7 @@ public abstract class Gun : MonoBehaviour
     public Transform gunMuzzle;
     public GameObject bulletHolePrefab;
     //public GameObject bulletHitParticlePrefab;
-    [HideInInspector] public PlayerController playerController;
+    [HideInInspector] public FpsController playerController;
     [HideInInspector] public Transform cameraTransform;
 
     private float currentAmmo = 0f;
@@ -27,7 +25,7 @@ public abstract class Gun : MonoBehaviour
         currentAmmo = gunData.magazineSize;
         currentReserveAmmo = gunData.maxReserveAmmo;
 
-        playerController = transform.root.GetComponent<PlayerController>();
+        playerController = transform.root.GetComponent<FpsController>();
         cameraTransform = playerController.playerCamera.transform;
 
         OnAmmoChanged?.Invoke(currentAmmo, currentReserveAmmo);
