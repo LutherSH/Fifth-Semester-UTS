@@ -32,11 +32,11 @@ public class GunData : ScriptableObject
     public float returnSpeed = 5f;
     public float maxRecoilRotation = 30f;
 
-    [Header("Weapon Sway")]
-    public float positionalSway = 0.1f;
-    public float rotationalSway = 0.1f;
-    public float swaySmoothness = 1f;
-    public float adsSwayMultiplier = 0.3f;
+    // [Header("Weapon Sway")]
+    // public float positionalSway = 0.1f;
+    // public float rotationalSway = 0.1f;
+    // public float swaySmoothness = 1f;
+    // public float adsSwayMultiplier = 0.3f;
 
     [Header("VFX")]
     public GameObject bulletTrailPrefab;

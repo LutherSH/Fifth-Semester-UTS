@@ -15,7 +15,7 @@ MonoBehaviour:
   gunName: Pindad P3
   damage: 20
   shootingRange: 50
-  fireRate: 3
+  fireRate: 5
   magazineSize: 15
   maxReserveAmmo: 60
   reloadTime: 1
@@ -30,10 +30,6 @@ MonoBehaviour:
   snappiness: 30
   returnSpeed: 10
   maxRecoilRotation: 50
-  positionalSway: 0.35
-  rotationalSway: 0.15
-  swaySmoothness: 3
-  adsSwayMultiplier: 5
   bulletTrailPrefab: {fileID: 7062137272843539580, guid: 91c533d0d82ac6b4985b851747eeb17b,
     type: 3}
-  bulletSpeed: 100
+  bulletSpeed: 500

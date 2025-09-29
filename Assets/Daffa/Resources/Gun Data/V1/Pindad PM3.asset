@@ -16,8 +16,8 @@ MonoBehaviour:
   damage: 10
   shootingRange: 150
   fireRate: 10
-  magazineSize: 30
-  maxReserveAmmo: 90
+  magazineSize: 25
+  maxReserveAmmo: 1000
   reloadTime: 2
   canAim: 1
   adsFOV: 50
@@ -25,15 +25,11 @@ MonoBehaviour:
   adsPositionMultiplier: 0.8
   adsRecoilMultiplier: 0.3
   recoilX: -5
-  recoilY: 0.2
+  recoilY: 3
   recoilZ: 1
   snappiness: 10
-  returnSpeed: 18
-  maxRecoilRotation: 50
-  positionalSway: 0.35
-  rotationalSway: 0.15
-  swaySmoothness: 3
-  adsSwayMultiplier: 5
+  returnSpeed: 12
+  maxRecoilRotation: 100
   bulletTrailPrefab: {fileID: 7062137272843539580, guid: 91c533d0d82ac6b4985b851747eeb17b,
     type: 3}
-  bulletSpeed: 100
+  bulletSpeed: 500
