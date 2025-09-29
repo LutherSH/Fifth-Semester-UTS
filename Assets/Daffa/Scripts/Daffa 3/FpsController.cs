@@ -4,7 +4,7 @@ using UnityEngine;
 public class FpsController : MonoBehaviour
 {
     public bool CanMove { get; private set; } = true;
-    private bool IsSprinting => canSprint && Input.GetKey(sprintKey);
+    private bool isSprinting => canSprint && Input.GetKey(sprintKey);
     private bool ShouldJump => Input.GetKeyDown(jumpKey) && characterController.isGrounded;
     private bool ShouldCrouch => Input.GetKeyDown(crouchKey) && !duringCrouchAnimation && characterController.isGrounded;
 
@@ -17,7 +17,6 @@ public class FpsController : MonoBehaviour
     [SerializeField] private bool canZoom = true;
     [SerializeField] private bool canInteract = true;
     //[SerializeField] private bool useFootSteps = true;
-
 
     [Header("Controls")]
     [SerializeField] private KeyCode sprintKey = KeyCode.LeftShift;
@@ -76,7 +75,7 @@ public class FpsController : MonoBehaviour
     [SerializeField] private AudioClip[] woodClips = default;
     [SerializeField] private AudioClip[] metalClips = default;
     private float footstepTimer = 0;
-    private float GetCurrentOffset => isCrouching ? baseStepSpeed * crouchStepMultiplier : IsSprinting ? baseStepSpeed * sprintStepMultiplier : baseStepSpeed;
+    private float GetCurrentOffset => isCrouching ? baseStepSpeed * crouchStepMultiplier : isSprinting ? baseStepSpeed * sprintStepMultiplier : baseStepSpeed;
     */
 
     // SLIDING PARAMETERS
@@ -157,8 +156,8 @@ public class FpsController : MonoBehaviour
 
     private void HandleMovementInput()
     {
-        // Check IsSprinting if yes use sprintSpeed, else use walkSpeed
-        currentInput = new Vector2((isCrouching ? crouchSpeed : IsSprinting ? sprintSpeed : walkSpeed) * Input.GetAxis("Vertical"), (IsSprinting ? sprintSpeed : isCrouching ? crouchSpeed : walkSpeed) * Input.GetAxis("Horizontal"));
+        // Check  isSprinting if yes use sprintSpeed, else use walkSpeed
+        currentInput = new Vector2((isCrouching ? crouchSpeed : isSprinting ? sprintSpeed : walkSpeed) * Input.GetAxis("Vertical"), (isSprinting ? sprintSpeed : isCrouching ? crouchSpeed : walkSpeed) * Input.GetAxis("Horizontal"));
 
         float moveDirectionY = moveDirection.y;
 
@@ -193,10 +192,10 @@ public class FpsController : MonoBehaviour
 
         if (Mathf.Abs(moveDirection.x) > 0.1f || Mathf.Abs(moveDirection.z) > 0.1f)
         {
-            timer += Time.deltaTime * (isCrouching ? crouchBobSpeed : IsSprinting ? sprintBobSpeed : walkBobSpeed);
+            timer += Time.deltaTime * (isCrouching ? crouchBobSpeed : isSprinting ? sprintBobSpeed : walkBobSpeed);
             playerCamera.transform.localPosition = new Vector3(
                 playerCamera.transform.localPosition.x,
-                defaultYPos + Mathf.Sin(timer) * (isCrouching ? crouchBobAmount : IsSprinting ? sprintBobAmount : walkBobAmount),
+                defaultYPos + Mathf.Sin(timer) * (isCrouching ? crouchBobAmount : isSprinting ? sprintBobAmount : walkBobAmount),
                 playerCamera.transform.localPosition.z);
         }
     }
@@ -233,10 +232,10 @@ public class FpsController : MonoBehaviour
     
     if (hitSomething)
     {
-        // Cek jika kita memandang objek Interactable yang baru
+        // Cek jika lihat ke objek Interactable yang baru
         if (hit.collider.TryGetComponent(out Interactable interactable))
         {
-            // Jika ini adalah objek yang berbeda dari sebelumnya
+            // Kalau object yang diliat kamera beda
             if (interactable != currentInteractable)
             {
                 // Hapus fokus dari objek sebelumnya (jika ada)
@@ -245,15 +244,15 @@ public class FpsController : MonoBehaviour
                     currentInteractable.OnLoseFocus();
                 }
                 
-                // Set objek baru dan beri fokus
+                // Set objek baru dan kasih fokus
                 currentInteractable = interactable;
                 currentInteractable.OnFocus();
             }
-            // Jika sama, tidak perlu melakukan apa-apa
         }
+        
         else
         {
-            // Memandang objek yang bukan Interactable, hilangkan fokus
+            // Kamera mengarah ke objek yang bukan Interactable, hilangkan fokus
             if (currentInteractable != null)
             {
                 currentInteractable.OnLoseFocus();
@@ -263,7 +262,7 @@ public class FpsController : MonoBehaviour
     }
     else
     {
-        // Tidak memandang apa-apa, hilangkan fokus
+        // Kamera tidak melihat Interactable objeck, hilangkan fokus
         if (currentInteractable != null)
         {
             currentInteractable.OnLoseFocus();
