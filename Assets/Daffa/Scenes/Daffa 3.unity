@@ -7976,7 +7976,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 770.9003, y: -457}
+  m_AnchoredPosition: {x: 770.9003, y: -434}
   m_SizeDelta: {x: 141.8006, y: 14}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1239107227
@@ -8861,7 +8861,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -670, y: -480}
+  m_AnchoredPosition: {x: -670, y: -457}
   m_SizeDelta: {x: 492, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1615745943
@@ -8937,7 +8937,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -670, y: -480}
+  m_AnchoredPosition: {x: -670, y: -457}
   m_SizeDelta: {x: 492, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1708638470
@@ -10402,9 +10402,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c106d12d5936a114fa6b842b0ec07a6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  positionalSway: 0.1
-  rotationalSway: 1
+  positionalSway: 1.1
+  rotationalSway: 0.1
   swaySmoothness: 5
+  hipfirePosition: {x: 0.3, y: 0, z: 0.22}
+  adsPosition: {x: 0, y: 0.44, z: -0.3}
 --- !u!20 &2737504659420649520
 Camera:
   m_ObjectHideFlags: 0
@@ -10473,13 +10475,11 @@ MonoBehaviour:
   canCrouch: 1
   canUseHeadBob: 1
   willSlideOnSlopes: 1
-  canZoom: 1
   canInteract: 1
   sprintKey: 304
   jumpKey: 32
   crouchKey: 306
   interactKey: 101
-  zoomKey: 324
   walkSpeed: 3
   sprintSpeed: 6
   crouchSpeed: 1.5
@@ -10501,8 +10501,6 @@ MonoBehaviour:
   sprintBobAmount: 0.1
   crouchBobSpeed: 8
   crouchBobAmount: 0.025
-  timeToZoom: 0.3
-  zoomFOV: 30
   interactionRayPoint: {x: 0.5, y: 0.5, z: 0}
   interactionDistance: 2
   interactionLayer:
@@ -10536,12 +10534,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36279c5d420ab934a8022be3c4ce90ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  recoilX: -5
-  recoilY: 1
-  recoilZ: 1
-  snappiness: 10
-  returnSpeed: 20
-  maxRecoilRotation: 10
 --- !u!81 &3520347068033895278
 AudioListener:
   m_ObjectHideFlags: 0
@@ -10559,7 +10551,7 @@ Transform:
   m_GameObject: {fileID: 5471495715052662388}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.237, y: -0.4, z: 1}
+  m_LocalPosition: {x: 0.3, y: 0, z: 0.22}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -10717,7 +10709,7 @@ Transform:
   m_GameObject: {fileID: 8968157738452044782}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.237, y: -0.4, z: 1}
+  m_LocalPosition: {x: 0.3, y: 0, z: 0.22}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -10767,7 +10759,6 @@ MonoBehaviour:
     type: 3}
   playerController: {fileID: 0}
   cameraTransform: {fileID: 0}
-  Recoil_Script: {fileID: 7840504223115569155}
 --- !u!33 &6467896346357720317
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -10819,9 +10810,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c106d12d5936a114fa6b842b0ec07a6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  positionalSway: 0.5
-  rotationalSway: 2
-  swaySmoothness: 3
+  positionalSway: 1.1
+  rotationalSway: 0.1
+  swaySmoothness: 5
+  hipfirePosition: {x: 0.3, y: 0, z: 0.22}
+  adsPosition: {x: 0, y: 0.44, z: -0.3}
 --- !u!114 &7840504223115569155
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10834,12 +10827,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36279c5d420ab934a8022be3c4ce90ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  recoilX: -0.95
-  recoilY: 0.5
-  recoilZ: 1
-  snappiness: 10
-  returnSpeed: 5
-  maxRecoilRotation: 10
 --- !u!114 &8376163466773466495
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10858,7 +10845,6 @@ MonoBehaviour:
     type: 3}
   playerController: {fileID: 0}
   cameraTransform: {fileID: 0}
-  Recoil_Script: {fileID: 3239971203228611624}
 --- !u!1 &8654564211573420399
 GameObject:
   m_ObjectHideFlags: 0
@@ -10947,7 +10933,7 @@ Transform:
   m_GameObject: {fileID: 5888128452380593736}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.5, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

@@ -14,11 +14,15 @@ public abstract class Gun : MonoBehaviour
     private float currentReserveAmmo = 0f;
     private float nextTimeToFire = 0f;
     private bool isReloading = false;
+    private bool isAiming = false;
 
-    public Recoil Recoil_Script;
+    // Components
+    private Recoil recoilComponent;
+    private WeaponAnim weaponAnimComponent;
 
     // New event for UI update
     public System.Action<float, float> OnAmmoChanged;
+     public System.Action<bool> OnAimStateChanged;
 
     void Start()
     {
@@ -28,22 +32,82 @@ public abstract class Gun : MonoBehaviour
         playerController = transform.root.GetComponent<FpsController>();
         cameraTransform = playerController.playerCamera.transform;
 
+         // Initialize components
+        InitializeRecoil();
+        InitializeWeaponAnim();
+
         OnAmmoChanged?.Invoke(currentAmmo, currentReserveAmmo);
 
-        Debug.Log(gunData.gunName + " initialized. Ammo: " + currentAmmo + "/" + currentReserveAmmo);
+        //Debug.Log(gunData.gunName + " initialized. Ammo: " + currentAmmo + "/" + currentReserveAmmo);
 
     }
 
     public virtual void Update()
     {
-        // Debug Input for testing
-        if (Input.GetKeyDown(KeyCode.P))
+        HandleAimInput();
+    }
+
+    private void InitializeRecoil()
+    {
+        recoilComponent = GetComponent<Recoil>();
+        if (recoilComponent == null)
         {
-            Debug.Log(gunData.gunName + " Ammo: " + currentAmmo + "/" + currentReserveAmmo);
+            recoilComponent = gameObject.AddComponent<Recoil>();
+        }
+        recoilComponent.Initialize(gunData);
+    }
+
+    private void InitializeWeaponAnim()
+    {
+        weaponAnimComponent = GetComponent<WeaponAnim>();
+        if (weaponAnimComponent == null)
+        {
+            weaponAnimComponent = gameObject.AddComponent<WeaponAnim>();
         }
     }
 
+    private void HandleAimInput()
+    {
+        if (gunData.canAim)
+        {
+            if (Input.GetKeyDown(KeyCode.Mouse1) && !isReloading)
+            {
+                ToggleAim();
+            }
+            
+            if (Input.GetKeyUp(KeyCode.Mouse1) && isAiming)
+            {
+                ToggleAim();
+            }
+        }
+    }
+
+    private void ToggleAim()
+    {
+        isAiming = !isAiming;
+        
+        if (isAiming)
+        {
+            playerController.Zoom(gunData.adsFOV, gunData.adsZoomTime);
+            if (weaponAnimComponent != null)
+                weaponAnimComponent.SetAiming(true); // Hanya kirim boolean
+            if (recoilComponent != null)
+                recoilComponent.SetAiming(true, gunData.adsRecoilMultiplier);
+        }
+        else
+        {
+            playerController.ResetZoom(gunData.adsZoomTime);
+            if (weaponAnimComponent != null)
+                weaponAnimComponent.SetAiming(false); // Hanya kirim boolean
+            if (recoilComponent != null)
+                recoilComponent.SetAiming(false, 1f);
+        }
+
+        OnAimStateChanged?.Invoke(isAiming);
+    }
+
     private void OnDisable() => isReloading = false;
+
     public void TryReload()
     {
         if (!isReloading && currentAmmo < gunData.magazineSize && currentReserveAmmo > 0 && this.gameObject.activeSelf)
@@ -107,7 +171,7 @@ public abstract class Gun : MonoBehaviour
         currentAmmo--;
 
         // Recoil();
-        Recoil_Script.RecoilFire();
+        recoilComponent.RecoilFire();
         // Muzzleflash();
 
         Debug.Log(gunData.gunName + " Shot! Ammo: " + currentAmmo + "/" + currentReserveAmmo);
@@ -116,6 +180,16 @@ public abstract class Gun : MonoBehaviour
         OnAmmoChanged?.Invoke(currentAmmo, currentReserveAmmo);
 
         Shoot();
+    }
+
+    public bool IsAiming()
+    {
+        return isAiming;
+    }
+
+    public bool IsReloading()
+    {
+        return isReloading;
     }
 
     // Method for ammo UI

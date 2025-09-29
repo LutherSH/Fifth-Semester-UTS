@@ -1,4 +1,5 @@
 using System.Collections;
+using UnityEditor.Rendering;
 using UnityEngine;
 
 public class FpsController : MonoBehaviour
@@ -14,7 +15,6 @@ public class FpsController : MonoBehaviour
     [SerializeField] private bool canCrouch = true;
     [SerializeField] private bool canUseHeadBob = true;
     [SerializeField] private bool willSlideOnSlopes = true;
-    [SerializeField] private bool canZoom = true;
     [SerializeField] private bool canInteract = true;
     //[SerializeField] private bool useFootSteps = true;
 
@@ -23,7 +23,6 @@ public class FpsController : MonoBehaviour
     [SerializeField] private KeyCode jumpKey = KeyCode.Space;
     [SerializeField] private KeyCode crouchKey = KeyCode.LeftControl;
     [SerializeField] private KeyCode interactKey = KeyCode.E;
-    [SerializeField] private KeyCode zoomKey = KeyCode.Mouse1;
 
     [Header("Movement Parameters")]
     [SerializeField] private float walkSpeed = 3.0f;
@@ -61,8 +60,6 @@ public class FpsController : MonoBehaviour
     private float timer;
 
     [Header("Zoom Parameters")]
-    [SerializeField] private float timeToZoom = 0.3f;
-    [SerializeField] private float zoomFOV = 30f;
     private float defaultFOV;
     private Coroutine zoomRoutine;
 
@@ -137,9 +134,6 @@ public class FpsController : MonoBehaviour
             if (canUseHeadBob)
                 HandleHeadBob();
 
-            if (canZoom)
-                HandleZoom();
-
             /*if (useFootSteps)
                 HandleFootsteps();
             */
@@ -199,76 +193,69 @@ public class FpsController : MonoBehaviour
                 playerCamera.transform.localPosition.z);
         }
     }
-
-    private void HandleZoom()
+    
+    public void Zoom(float targetFOV, float zoomTime)
     {
-        if (Input.GetKeyDown(zoomKey))
+        if (zoomRoutine != null)
         {
-            if (zoomRoutine != null)
-            {
-                StopCoroutine(zoomRoutine);
-                zoomRoutine = null;
-            }
-
-            zoomRoutine = StartCoroutine(ToggleZoom(true));
+            StopCoroutine(zoomRoutine);
         }
+        zoomRoutine = StartCoroutine(ToggleZoom(true, targetFOV, zoomTime));
+    }
 
-        if (Input.GetKeyUp(zoomKey))
+    public void ResetZoom(float zoomTime)
+    {
+        if (zoomRoutine != null)
         {
-            if (zoomRoutine != null)
-            {
-                StopCoroutine(zoomRoutine);
-                zoomRoutine = null;
-            }
-
-            zoomRoutine = StartCoroutine(ToggleZoom(false));
+            StopCoroutine(zoomRoutine);
         }
+        zoomRoutine = StartCoroutine(ToggleZoom(false, defaultFOV, zoomTime));
     }
 
     private void HandleInteractionCheck()
     {
         Ray ray = playerCamera.ViewportPointToRay(interactionRayPoint);
-    bool hitSomething = Physics.Raycast(ray, out RaycastHit hit, interactionDistance, interactionLayer);
-    
-    if (hitSomething)
-    {
-        // Cek jika lihat ke objek Interactable yang baru
-        if (hit.collider.TryGetComponent(out Interactable interactable))
+        bool hitSomething = Physics.Raycast(ray, out RaycastHit hit, interactionDistance, interactionLayer);
+
+        if (hitSomething)
         {
-            // Kalau object yang diliat kamera beda
-            if (interactable != currentInteractable)
+            // Cek jika lihat ke objek Interactable yang baru
+            if (hit.collider.TryGetComponent(out Interactable interactable))
             {
-                // Hapus fokus dari objek sebelumnya (jika ada)
+                // Kalau object yang diliat kamera beda
+                if (interactable != currentInteractable)
+                {
+                    // Hapus fokus dari objek sebelumnya (jika ada)
+                    if (currentInteractable != null)
+                    {
+                        currentInteractable.OnLoseFocus();
+                    }
+
+                    // Set objek baru dan kasih fokus
+                    currentInteractable = interactable;
+                    currentInteractable.OnFocus();
+                }
+            }
+
+            else
+            {
+                // Kamera mengarah ke objek yang bukan Interactable, hilangkan fokus
                 if (currentInteractable != null)
                 {
                     currentInteractable.OnLoseFocus();
+                    currentInteractable = null;
                 }
-                
-                // Set objek baru dan kasih fokus
-                currentInteractable = interactable;
-                currentInteractable.OnFocus();
             }
         }
-        
         else
         {
-            // Kamera mengarah ke objek yang bukan Interactable, hilangkan fokus
+            // Kamera tidak melihat Interactable objeck, hilangkan fokus
             if (currentInteractable != null)
             {
                 currentInteractable.OnLoseFocus();
                 currentInteractable = null;
             }
         }
-    }
-    else
-    {
-        // Kamera tidak melihat Interactable objeck, hilangkan fokus
-        if (currentInteractable != null)
-        {
-            currentInteractable.OnLoseFocus();
-            currentInteractable = null;
-        }
-    }
     }
 
     private void HandleInteractionInput()
@@ -360,15 +347,14 @@ public class FpsController : MonoBehaviour
         duringCrouchAnimation = false;
     }
 
-    private IEnumerator ToggleZoom(bool isEnter)
+    private IEnumerator ToggleZoom(bool isEnter, float targetFOV, float zoomTime)
     {
-        float targetFOV = isEnter ? zoomFOV : defaultFOV;
         float startingFOV = playerCamera.fieldOfView;
         float timeElapsed = 0;
 
-        while (timeElapsed < timeToZoom)
+        while (timeElapsed < zoomTime)
         {
-            playerCamera.fieldOfView = Mathf.Lerp(startingFOV, targetFOV, timeElapsed / timeToZoom);
+            playerCamera.fieldOfView = Mathf.Lerp(startingFOV, targetFOV, timeElapsed / zoomTime);
             timeElapsed += Time.deltaTime;
             yield return null;
         }

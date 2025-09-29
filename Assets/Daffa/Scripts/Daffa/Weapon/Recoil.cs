@@ -7,19 +7,28 @@ public class Recoil : MonoBehaviour
     private Vector3 targetRotation;
 
     // Hipfire Recoil
-    [SerializeField] private float recoilX;
-    [SerializeField] private float recoilY;
-    [SerializeField] private float recoilZ;
+    private float recoilX;
+    private float recoilY;
+    private float recoilZ;
 
     // Settings
-    [SerializeField] private float snappiness = 10f;
-    [SerializeField] private float returnSpeed = 5f;
+     private float snappiness = 10f;
+    private float returnSpeed = 5f;
 
     
-    [SerializeField] private float maxRecoilRotation = 30f;
+    private float maxRecoilRotation;
+    private float currentRecoilMultiplier = 1f;
 
-    void Start()
-    {        
+
+    public void Initialize(GunData gunData)
+    {
+        recoilX = gunData.recoilX;
+        recoilY = gunData.recoilY;
+        recoilZ = gunData.recoilZ;
+        snappiness = gunData.snappiness;
+        returnSpeed = gunData.returnSpeed;
+        maxRecoilRotation = gunData.maxRecoilRotation;
+        
         currentRotation = Vector3.zero;
         targetRotation = Vector3.zero;
     }
@@ -27,31 +36,25 @@ public class Recoil : MonoBehaviour
     void Update()
     {
         targetRotation = Vector3.Lerp(targetRotation, Vector3.zero, returnSpeed * Time.deltaTime);
-        currentRotation = Vector3.Lerp(currentRotation, targetRotation, snappiness * Time.deltaTime);
+        currentRotation = Vector3.Slerp(currentRotation, targetRotation, snappiness * Time.deltaTime);
         
         currentRotation = Vector3.ClampMagnitude(currentRotation, maxRecoilRotation);
         
-        ApplyCombinedRotation();
+        transform.localRotation = Quaternion.Euler(currentRotation);
     }
     
-    private void ApplyCombinedRotation()
-    {
-            Quaternion finalRotation = Quaternion.identity;
-            finalRotation = finalRotation * Quaternion.Euler(currentRotation);
-            
-            transform.localRotation = finalRotation;
-        
-        
-            transform.localRotation = Quaternion.Euler(currentRotation);
-    }
-
     public void RecoilFire()
     {
         float randomY = Random.Range(-recoilY, recoilY);
         float randomZ = Random.Range(-recoilZ, recoilZ);
         
-        targetRotation += new Vector3(recoilX, randomY, randomZ);
-        
-        targetRotation = Vector3.ClampMagnitude(targetRotation, maxRecoilRotation);
+        targetRotation += new Vector3(recoilX * currentRecoilMultiplier, 
+                                    randomY * currentRecoilMultiplier, 
+                                    randomZ * currentRecoilMultiplier);
+    }
+
+    public void SetAiming(bool aiming, float recoilMultiplier)
+    {
+        currentRecoilMultiplier = aiming ? recoilMultiplier : 1f;
     }
 }
