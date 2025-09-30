@@ -9,29 +9,29 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1f3dea934645a7742841eac3f9c8c454, type: 3}
-  m_Name: Pindad P3 v3
+  m_Script: {fileID: 11500000, guid: 4c8a98b40cb9fa64e94efc06883936df, type: 3}
+  m_Name: Pindad PM3
   m_EditorClassIdentifier: 
-  weaponName: Pindad P3
+  weaponName: Pindad PM3
   weaponType: 0
-  damage: 20
-  range: 150
-  fireRate: 4
-  magazineSize: 15
-  maxReserveAmmo: 90
-  reloadTime: 1
-  fireMode: 1
+  damage: 15
+  range: 250
+  fireRate: 10
+  magazineSize: 30
+  maxReserveAmmo: 120
+  reloadTime: 2
+  fireMode: 0
   recoilX: -5
-  recoilY: 0.1
+  recoilY: 3
   recoilZ: 1
-  snappiness: 30
-  returnSpeed: 10
-  adsRecoilMultiplier: 1
+  snappiness: 10
+  returnSpeed: 12
+  adsRecoilMultiplier: 0.4
   positionalSway: 0.15
   rotationalSway: 0.1
   swaySmoothness: 5
   canAim: 1
-  adsFOV: 55
+  adsFOV: 50
   adsZoomTime: 20
   aimTransitionSpeed: 15
   bulletTrailPrefab: {fileID: 7062137272843539580, guid: 91c533d0d82ac6b4985b851747eeb17b,
