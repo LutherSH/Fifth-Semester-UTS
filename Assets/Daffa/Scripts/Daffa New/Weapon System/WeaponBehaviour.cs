@@ -1,10 +1,8 @@
 using System.Collections;
-
 using UnityEngine;
 
 public class WeaponBehaviour : MonoBehaviour
 {
-
     [Header("Configuration")]
     public WeaponConfig config;
 
@@ -83,9 +81,6 @@ public class WeaponBehaviour : MonoBehaviour
         if (weaponAnimComponent != null)
             weaponAnimComponent.Initialize(config);
 
-        if (weaponAnimComponent != null)
-            weaponAnimComponent.Initialize(config);
-
         UpdateAmmoUI();
     }
 
@@ -151,7 +146,7 @@ public class WeaponBehaviour : MonoBehaviour
         if (recoilComponent != null)
             recoilComponent.SetAiming(isAiming, config.adsRecoilMultiplier);
 
-        Debug.Log($"Aim state: {isAiming}");
+        //Debug.Log($"Aim state: {isAiming}");
     }
 
     public void TryShoot()
@@ -330,6 +325,6 @@ public class WeaponBehaviour : MonoBehaviour
     // Public getters
     public int GetCurrentAmmo() => currentAmmo;
     public int GetReserveAmmo() => reserveAmmo;
-    public bool IsAiming() => isAiming;
-    public bool IsReloading() => isReloading;
+    // public bool IsAiming() => isAiming;
+    // public bool IsReloading() => isReloading;
 }

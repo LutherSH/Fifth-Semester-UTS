@@ -18,9 +18,11 @@ MonoBehaviour:
   range: 150
   fireRate: 4
   magazineSize: 15
-  maxReserveAmmo: 90
+  maxReserveAmmo: 1000
   reloadTime: 1
   fireMode: 1
+  burstCount: 3
+  burstDelay: 0.1
   recoilX: -5
   recoilY: 0.1
   recoilZ: 1

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PickUpController : MonoBehaviour
 {
-    public Gun gunScript;
+    public WeaponBehaviour weaponBehaviour;
     public Rigidbody rb;
     public BoxCollider coll;
     public Transform fpsController, weaponHolder, mainCamera;

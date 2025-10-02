@@ -20,9 +20,7 @@ public class Recoil : MonoBehaviour
 
     // Track initialized status
     private bool isInitialized = false;
-
-
-
+    
     public void Initialize(WeaponConfig config)
     {
         recoilX = config.recoilX;
