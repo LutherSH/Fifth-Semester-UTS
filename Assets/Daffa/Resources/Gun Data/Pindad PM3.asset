@@ -26,7 +26,7 @@ MonoBehaviour:
   recoilZ: 1
   snappiness: 10
   returnSpeed: 12
-  adsRecoilMultiplier: 1
+  adsRecoilMultiplier: 0.8
   positionalSway: 0.15
   rotationalSway: 0.1
   swaySmoothness: 5
