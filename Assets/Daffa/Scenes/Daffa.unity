@@ -10966,8 +10966,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43d4e971345a6a044bd6be9ee41f0bd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerController: {fileID: 0}
   config: {fileID: 11400000, guid: e1b064fb32199e64d8ab2c9a9b8807d0, type: 2}
+  playerController: {fileID: 0}
   muzzleTransform: {fileID: 2929832429011840313}
   cameraTransform: {fileID: 7284753612089567398}
   recoilComponent: {fileID: 7840504223115569155}
@@ -11113,8 +11113,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43d4e971345a6a044bd6be9ee41f0bd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerController: {fileID: 0}
   config: {fileID: 11400000, guid: 1f1edd8a9f21997409c08f13f4bf6062, type: 2}
+  playerController: {fileID: 0}
   muzzleTransform: {fileID: 1837039476537891140}
   cameraTransform: {fileID: 7284753612089567398}
   recoilComponent: {fileID: 8968157738452044786}
@@ -11160,7 +11160,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ad9ddf252d061841ab5cd1cbb51e832, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gunScript: {fileID: 0}
+  weaponBehaviour: {fileID: 0}
   rb: {fileID: 0}
   coll: {fileID: 0}
   fpsController: {fileID: 0}

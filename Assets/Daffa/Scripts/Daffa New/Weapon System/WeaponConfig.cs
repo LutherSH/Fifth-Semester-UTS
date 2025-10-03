@@ -20,6 +20,10 @@ public class WeaponConfig : ScriptableObject
     public FireMode fireMode;
     public enum FireMode { Auto, Semi, Burst };
 
+    [Header("Burst Fire Config")]
+    public int burstCount;
+    public float burstDelay;
+
     [Header("Recoil")]
     public float recoilX;
     public float recoilY;

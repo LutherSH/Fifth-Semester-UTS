@@ -21,8 +21,8 @@ MonoBehaviour:
   maxReserveAmmo: 1000
   reloadTime: 1
   fireMode: 1
-  burstCount: 3
-  burstDelay: 0.1
+  burstCount: 0
+  burstDelay: 0
   recoilX: -5
   recoilY: 0.1
   recoilZ: 1

@@ -21,6 +21,10 @@ public class WeaponBehaviour : MonoBehaviour
     private bool isAiming;
     private Coroutine reloadCoroutine;
 
+    // Burst
+    private bool isBurstFiring;
+    private int shotsInBurst;
+
     // Events
     public System.Action<int, int> OnAmmoChanged;
     public System.Action<bool> OnAimStateChanged;
@@ -102,6 +106,11 @@ public class WeaponBehaviour : MonoBehaviour
             TryShoot();
         }
 
+        if (config.fireMode == WeaponConfig.FireMode.Burst && Input.GetButtonDown("Fire1"))
+        {
+            TryBurstFire();
+        }
+
         // Handle reload
         if (Input.GetKeyDown(KeyCode.R))
         {
@@ -151,7 +160,7 @@ public class WeaponBehaviour : MonoBehaviour
 
     public void TryShoot()
     {
-        if (isReloading) return;
+        if (isReloading || isBurstFiring) return;
 
         if (currentAmmo <= 0)
         {
@@ -211,10 +220,64 @@ public class WeaponBehaviour : MonoBehaviour
             StartCoroutine(SpawnBulletTrail(targetPoint));
     }
 
+    private void TryBurstFire()
+    {
+        if (isReloading && isBurstFiring) return;
+
+        if (currentAmmo <= 0)
+        {
+            TryReload();
+            return;
+        }
+
+        if (Time.time < nextFireTime) return;
+
+        StartCoroutine(BurstFire());
+    }
+
+    private IEnumerator BurstFire()
+    {
+        isBurstFiring = true;
+        shotsInBurst = 0;
+
+        while (shotsInBurst < config.burstCount && currentAmmo > 0 && !isReloading)
+        {
+            ShootBurstShot();
+            shotsInBurst++;
+
+            if (shotsInBurst < config.burstCount && currentAmmo > 0)
+            {
+                yield return new WaitForSeconds(config.burstDelay);
+            }
+            
+            nextFireTime = Time.time + (1f / config.fireRate);
+            isBurstFiring = false;
+        }
+    }
+
+    private void ShootBurstShot()
+    {
+        currentAmmo--;
+
+        // Apply recoil
+        if (recoilComponent != null)
+            recoilComponent.RecoilFire();
+
+        // Shoot based on weapon type
+        switch (config.weaponType)
+        {
+            case WeaponConfig.WeaponType.Raycast:
+                PerformRaycastShoot();
+                break;
+        }
+
+        UpdateAmmoUI();
+    }
+
     private void ApplyDamageToTarget(Collider targetCollider, float damage)
     {
         int damageAmount = Mathf.RoundToInt(damage);
-        
+
         if (targetCollider.CompareTag("Player"))
         {
             PlayerBehaviour player = targetCollider.GetComponent<PlayerBehaviour>();
@@ -325,6 +388,4 @@ public class WeaponBehaviour : MonoBehaviour
     // Public getters
     public int GetCurrentAmmo() => currentAmmo;
     public int GetReserveAmmo() => reserveAmmo;
-    // public bool IsAiming() => isAiming;
-    // public bool IsReloading() => isReloading;
 }
