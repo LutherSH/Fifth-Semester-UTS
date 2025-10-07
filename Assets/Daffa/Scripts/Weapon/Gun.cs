@@ -132,11 +132,15 @@ public abstract class Gun : MonoBehaviour
     }
 
     // Pick up ammo
-    /*public void AddAmmo(int amount)
+    public void AddAmmo(int amount)
     {
-        currentReserveAmmo = Mathf.Min(currentReserveAmmo + amount, gunData.maxReserveAmmo);
-        Debug.Log("Picked up " + amount + " ammo for " + gunData.gunName + ". Reserve: " + currentReserveAmmo);
+        float newReserveAmmo = currentReserveAmmo + amount;
+        currentReserveAmmo = Mathf.Min(newReserveAmmo, gunData.maxReserveAmmo);
+        
+        Debug.Log($"Picked up {amount} ammo for {gunData.gunName}. Reserve: {currentReserveAmmo}");
+        
+        // Update UI
+        OnAmmoChanged?.Invoke(currentAmmo, currentReserveAmmo);
     }
-    */
     public abstract void Shoot();
 }
