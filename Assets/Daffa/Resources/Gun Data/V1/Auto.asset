@@ -17,10 +17,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   damage: 10
-  shootingRange: 150
+  shootingRange: 200
   fireRate: 10
   magazineSize: 30
-  maxReserveAmmo: 90
+  maxReserveAmmo: 120
   reloadTime: 2
   bulletTrailPrefab: {fileID: 7062137272843539580, guid: 91c533d0d82ac6b4985b851747eeb17b,
     type: 3}
