@@ -1,6 +1,7 @@
 using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Rendering;
 
 public class EnemyAnimalAI : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class EnemyAnimalAI : MonoBehaviour
     public NavMeshAgent nAgent;
     public Transform player;
     public LayerMask theGround, thePlayer;
+    public PlayerBehaviour playerBehaviour;
 
     ///////////////////////////////////////////////////////////////////////
     ///// Property For Patrol
@@ -38,12 +40,19 @@ public class EnemyAnimalAI : MonoBehaviour
     public bool playerInAttackRange;
     public float attackRange;
 
+    public Transform firePoint;
+    public GameObject arrowPrevab;
+    public float arrowSpeed = 20f;
+    public float fireCooldown = 2f;
+    [HideInInspector]public float nextFireTime = 0f;
+
     ///////////////////////////////////////////////////////////////////////
     //// Property For Vision
 
     [Header("Vision Settings")]
     private float visionRange = 10f;
     public float fov = 90f;
+    public float defaultFov;
     public LayerMask theWall;
 
     ///////////////////////////////////////////////////////////////////////
@@ -59,11 +68,14 @@ public class EnemyAnimalAI : MonoBehaviour
     {
         SwitchState(new IdleState(this)); // IDLE
         visionRange = sightRange;
+        defaultFov = fov;
     }
     ///////////////////////////////////////////////////////////////////////
     /// UPDATE
     void Update()
     {
+        if (playerBehaviour.isDead) return;
+
         // Attack check (still sphere-based)
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, thePlayer);
 
@@ -94,9 +106,12 @@ public class EnemyAnimalAI : MonoBehaviour
                 playerInSightRange = false;      // ❌ Outside cone
             }
         }
+
         else
         {
             playerInSightRange = false;          // ❌ Too far away
+            playerInAttackRange = false;
+
         }
 
         // STATE UPDATER

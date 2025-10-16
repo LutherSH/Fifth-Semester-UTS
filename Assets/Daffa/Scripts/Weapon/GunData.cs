@@ -17,13 +17,8 @@ public class GunData : ScriptableObject
 
     [Header("Reload Config")]
     public float magazineSize;
+    public float maxReserveAmmo;
     public float reloadTime;
-
-    [Header("Recoil Setting")]
-    public float recoilAmount;
-    public Vector2 maxRecoil;
-    public float recoilSpeed;
-    public float resetRecoilSpeed;
 
     [Header("VFX")]
     public GameObject bulletTrailPrefab;

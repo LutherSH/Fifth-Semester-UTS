@@ -38,10 +38,6 @@ public class PlayerController : MonoBehaviour
     private float currentSpeedMultiplier;
     private float xRotation;
 
-    [Header("Recoil")]
-    private Vector3 targetRecoil = Vector3.zero;
-    private Vector3 currentRecoil = Vector3.zero;
-
     [Header("Footstep Settings")]                             
     [SerializeField] private LayerMask terrainLayerMask;
     [SerializeField] private float stepInterval = 1f;
@@ -104,31 +100,17 @@ public class PlayerController : MonoBehaviour
 
         xRotation = Mathf.Clamp(xRotation, -90, 90);
 
-        virtualCamera.transform.localRotation = Quaternion.Euler(xRotation + currentRecoil.y, currentRecoil.x, 0);
+        virtualCamera.transform.localRotation = Quaternion.Euler(xRotation, 0, 0);
         
         transform.Rotate(Vector3.up * mouseX);
-    }
-
-    public void ApplyRecoil(GunData gunData)
-    {
-        float recoilX = Random.Range(-gunData.maxRecoil.x, gunData.maxRecoil.x) * gunData.recoilAmount;
-        float recoilY = Random.Range(-gunData.maxRecoil.y, gunData.maxRecoil.y) * gunData.recoilAmount;
-
-        targetRecoil += new Vector3(recoilX, recoilY, 0);
-
-        currentRecoil = Vector3.MoveTowards(currentRecoil, targetRecoil, Time.deltaTime * gunData.recoilSpeed);
-    }
-
-    public void ResetRecoil(GunData gunData)
-    {
-        currentRecoil = Vector3.MoveTowards(currentRecoil, Vector3.zero, Time.deltaTime * gunData.resetRecoilSpeed);
-        targetRecoil = Vector3.MoveTowards(targetRecoil, Vector3.zero, Time.deltaTime * gunData.resetRecoilSpeed);
     }
 
     private void GroundMovement()
     {
         Vector3 move = new Vector3(turnInput, 0, moveInput);
-        move = virtualCamera.transform.TransformDirection(move);                    // Move forward follow the cinemachine camera direction
+        
+        // Move forward follow the cinemachine camera direction
+        move = virtualCamera.transform.TransformDirection(move);                    
 
         float targetMultiplier = 1f;
 
